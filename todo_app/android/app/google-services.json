@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "584439603879",
+    "firebase_url": "https://kaiserret202747.firebaseio.com",
+    "project_id": "kaiserret202747",
+    "storage_bucket": "kaiserret202747.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:584439603879:android:58da299edc76e33e437182",
+        "android_client_info": {
+          "package_name": "kaisertodo.todoapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "584439603879-k088fs0gabpifc53i2mdbjteupa3itqv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4ApvGkp-fpL7A6jOaIlgQbAaJq9YvpsI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "584439603879-k088fs0gabpifc53i2mdbjteupa3itqv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
