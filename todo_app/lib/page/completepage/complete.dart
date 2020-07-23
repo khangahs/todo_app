@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:todoapp/widget/subbody.dart';
 
+import '../../widget/mainbody.dart';
+
 class CompletePage extends StatefulWidget {
   @override
   _CompletePageState createState() => _CompletePageState();
@@ -8,6 +10,6 @@ class CompletePage extends StatefulWidget {
 
 class _CompletePageState extends State<CompletePage> {
   Widget build(BuildContext context) {
-    return Scaffold(body: SubBody());
+    return Scaffold(body: MainBody());
   }
 }

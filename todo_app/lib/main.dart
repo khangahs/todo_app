@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/page/allpage/allpage.dart';
@@ -6,6 +7,8 @@ import 'package:todoapp/page/incompletepage/incomplete.dart';
 import 'package:todoapp/provider/provider.dart';
 import 'package:todoapp/service/firebase.dart';
 import 'package:todoapp/widget/addtask.dart';
+
+import 'modal/task.dart';
 
 void main() {
   runApp(MyApp());
@@ -42,6 +45,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
+  Task task;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -64,9 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Icon(Icons.add),
         onPressed: () {
           showModalBottomSheet(
-            context: context,
-            builder: (_) => AddTask(isEditMode: false),
-          );
+              context: context, builder: (_) => AddTask(isEditMode: false));
         },
         tooltip: 'Add a new task!',
       ),

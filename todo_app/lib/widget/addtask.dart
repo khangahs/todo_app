@@ -4,6 +4,8 @@ import 'package:todoapp/provider/provider.dart';
 import 'package:todoapp/modal/task.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../modal/task.dart';
+
 //Show a bottom sheet that allows the user to create or edit a task.
 //### MISSING FEATURES ###
 // Proper Form Focus and keyboard actions.
@@ -11,13 +13,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 // Keyboard must push the sheet up so the "ADD TASK" button is visible.
 
 class AddTask extends StatefulWidget {
-  final String id;
+  final String taskId;
+  final String description;
   final bool isEditMode;
 
-  AddTask({
-    this.id,
-    this.isEditMode,
-  });
+  AddTask({this.taskId, this.description, this.isEditMode});
 
   @override
   _AddTaskState createState() => _AddTaskState();
@@ -35,7 +35,8 @@ class _AddTaskState extends State<AddTask> {
         Provider.of<TaskProvider>(context, listen: false)
             .createTask(Task(description: _inputDescription));
       } else {
-        Provider.of<TaskProvider>(context, listen: false).saveTask();
+        Provider.of<TaskProvider>(context, listen: false)
+            .editTask(Task(description: widget.description));
       }
       Navigator.of(context).pop();
     }

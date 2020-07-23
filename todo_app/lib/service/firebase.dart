@@ -4,8 +4,15 @@ import 'package:todoapp/modal/task.dart';
 class FirestoreService {
   Firestore _db = Firestore.instance;
 
-  Future<void> saveTask(Task task) {
+  Future<void> editTask(Task task) {
     return _db.collection('tasks').document(task.taskId).setData(task.toMap());
+  }
+
+  Future<void> optionCheck(Task task) {
+    return _db
+        .collection('tasks')
+        .document(task.taskId)
+        .updateData({'isDone': true});
   }
 
   Stream<List<Task>> getTasks() {
@@ -25,5 +32,12 @@ class FirestoreService {
       'description': task.description,
       'isDone': task.isDone
     });
+  }
+
+  Future<void> changeStatus(bool newValue, Task task) {
+    return _db
+        .collection('tasks')
+        .document(task.taskId)
+        .updateData({'isDone': newValue});
   }
 }

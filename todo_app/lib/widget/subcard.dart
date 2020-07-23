@@ -14,9 +14,12 @@ class TheSubCard extends StatefulWidget {
 }
 
 class _TheSubCardState extends State<TheSubCard> {
+  bool isComplete = true;
+
   void _checkItem() {
     setState(() {
-      Provider.of<TaskProvider>(context, listen: false).optionCheck(true);
+//      Provider.of<TaskProvider>(context, listen: false)
+//          .optionCheck(widget.task.taskId);
     });
   }
 

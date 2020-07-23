@@ -16,11 +16,19 @@ class TheCard extends StatefulWidget {
 class _TheCardState extends State<TheCard> {
   void _checkItem() {
     setState(() {
-      Provider.of<TaskProvider>(context, listen: false).optionCheck(true);
+//      Provider.of<TaskProvider>(context, listen: false)
+//          .changeStatus(false, Task(isDone: false));
     });
   }
 
+//  Future<dynamic> checkLEDStatus() async {
+//    DocumentSnapshot snapshot =
+//    await db.collection('LEDStatus').document('LEDStatus').get();
+//    return snapshot.data['LEDOn'];
+//  }
+
   Widget build(BuildContext context) {
+    final changeStatus = Provider.of<TaskProvider>(context, listen: false);
     return GestureDetector(
         onTap: _checkItem,
         child: CheckboxListTile(
