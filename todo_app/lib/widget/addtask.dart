@@ -3,40 +3,43 @@ import 'package:provider/provider.dart';
 import 'package:todoapp/provider/provider.dart';
 import 'package:todoapp/modal/task.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:uuid/uuid.dart';
 import '../modal/task.dart';
-
-//Show a bottom sheet that allows the user to create or edit a task.
-//### MISSING FEATURES ###
-// Proper Form Focus and keyboard actions.
-// BottomModalSheet size is too big and doesn't work proper with keyboard.
-// Keyboard must push the sheet up so the "ADD TASK" button is visible.
 
 class AddTask extends StatefulWidget {
   final String taskId;
   final String description;
   final bool isEditMode;
+  final Task task;
 
-  AddTask({this.taskId, this.description, this.isEditMode});
+  AddTask({this.taskId, this.description, this.isEditMode, this.task});
 
   @override
   _AddTaskState createState() => _AddTaskState();
 }
 
 class _AddTaskState extends State<AddTask> {
+  var uuid = Uuid();
+  Firestore _db = Firestore.instance;
   Task task;
   String _inputDescription;
   final _formKey = GlobalKey<FormState>();
+
+  Future<void> createTask(Task task) {
+    String documentId = uuid.v4();
+    Task task =
+        Task(taskId: documentId, description: _inputDescription, isDone: false);
+    return _db.collection('tasks').document(documentId).setData(task.toMap());
+  }
 
   void _validateForm() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       if (!widget.isEditMode) {
-        Provider.of<TaskProvider>(context, listen: false)
-            .createTask(Task(description: _inputDescription));
+        createTask(Task());
       } else {
-        Provider.of<TaskProvider>(context, listen: false)
-            .editTask(Task(description: widget.description));
+        Provider.of<TaskProvider>(context, listen: false);
+        createTask(Task());
       }
       Navigator.of(context).pop();
     }
@@ -45,6 +48,12 @@ class _AddTaskState extends State<AddTask> {
   @override
   void initState() {
     if (widget.isEditMode) {
+      final taskList = Provider.of<List<Task>>(context);
+      Task getById(String id) {
+        return taskList.firstWhere((task) => task.taskId == id);
+      }
+
+      getById(task.taskId);
       _inputDescription = task.description;
     }
     super.initState();

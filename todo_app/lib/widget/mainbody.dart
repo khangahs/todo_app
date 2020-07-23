@@ -3,29 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:todoapp/provider/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/widget/addtask.dart';
-import 'package:todoapp/widget/card.dart';
-import 'package:todoapp/modal/task.dart';
 
-class MainListItem extends StatefulWidget {
-  final Task task;
-
-  MainListItem(this.task);
-
+class MainBody extends StatefulWidget {
   @override
-  _MainListItemState createState() => _MainListItemState();
+  _MainBodyState createState() => _MainBodyState();
 }
 
-class _MainListItemState extends State<MainListItem> {
+class _MainBodyState extends State<MainBody> {
   @override
   Widget build(BuildContext context) {
-    return TheCard(widget.task);
-  }
-}
-
-class MainBody extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-//    final taskList = Provider.of<List<Task>>(context);
     return StreamBuilder(
         stream: Firestore.instance.collection('tasks').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -57,14 +43,49 @@ class MainBody extends StatelessWidget {
                   : ListView.builder(
                       itemCount: dbRef.length,
                       itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(dbRef[index]["description"]),
-                          subtitle: Text(dbRef[index]["taskId"]),
-                          onTap: () {
-                            showModalBottomSheet(
-                                context: context,
-                                builder: (_) => AddTask(isEditMode: true));
+                        return Dismissible(
+                          key: ValueKey(dbRef[index]["taskId"]),
+                          direction: DismissDirection.endToStart,
+                          background: Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 15),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  'DELETE',
+                                  style: TextStyle(
+                                    color: Theme.of(context).errorColor,
+                                    fontFamily: 'Lato',
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                SizedBox(width: 5),
+                                Icon(
+                                  Icons.delete,
+                                  color: Theme.of(context).errorColor,
+                                  size: 28,
+                                ),
+                              ],
+                            ),
+                          ),
+                          onDismissed: (direction) {
+                            Provider.of<TaskProvider>(context, listen: false)
+                                .removeTask(dbRef[index]["taskId"]);
                           },
+                          child: ListTile(
+                            title: Text(dbRef[index]["description"]),
+                            subtitle: Text(dbRef[index]["taskId"]),
+                            onTap: () {
+                              showModalBottomSheet(
+                                  context: context,
+                                  builder: (_) => AddTask(
+                                      taskId: dbRef[index]["taskId"],
+                                      description: dbRef[index]["description"],
+                                      isEditMode: true));
+                            },
+                          ),
                         );
                       },
                     );

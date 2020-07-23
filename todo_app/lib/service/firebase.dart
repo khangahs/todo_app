@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todoapp/modal/task.dart';
+import 'package:uuid/uuid.dart';
 
 class FirestoreService {
   Firestore _db = Firestore.instance;
+  var uuid = Uuid();
 
-  Future<void> editTask(Task task) {
-    return _db.collection('tasks').document(task.taskId).setData(task.toMap());
+  Future<void> editTask(String taskId) {
+    Task task;
+    return _db.collection('tasks').document(taskId).setData(task.toMap());
   }
 
   Future<void> optionCheck(Task task) {
@@ -21,17 +24,11 @@ class FirestoreService {
         .map((document) => Task.fromFirestore(document.data))
         .toList());
   }
-
+//Future <void> getTaskId(String taskId) {
+//    return _db.collection('tasks').where(field)
+//}
   Future<void> removeTask(String taskId) {
     return _db.collection('tasks').document(taskId).delete();
-  }
-
-  Future<void> createTask(Task task) {
-    return _db.collection('tasks').add({
-      'taskId': task.taskId,
-      'description': task.description,
-      'isDone': task.isDone
-    });
   }
 
   Future<void> changeStatus(bool newValue, Task task) {

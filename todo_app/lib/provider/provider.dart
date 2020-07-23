@@ -33,24 +33,15 @@ class TaskProvider with ChangeNotifier {
     firestoreService.optionCheck(Task(taskId: task.taskId));
   }
 
-  createTask(Task task) {
-    final newTask = Task(
-      taskId: uuid.v4(),
-      description: task.description,
-    );
-    firestoreService.createTask(newTask);
-  }
+//  createTask(Task task) {
+//    firestoreService.createTask(Task(description: task.description));
+//  }
 
-  editTask(Task task) {
-    if (_taskId == null) {
-      var newTask = Task(description: task.description, taskId: uuid.v4());
-      firestoreService.editTask(newTask);
-    } else {
-      //Update
-      var updatedTask = Task(description: task.description, taskId: _taskId);
-      firestoreService.editTask(updatedTask);
-    }
-  }
+//  editTask(Task task) {
+//    //Update
+//    var updatedTask = Task(description: task.description, taskId: _taskId);
+//    firestoreService.editTask(updatedTask);
+//  }
 
   removeTask(String taskId) {
     firestoreService.removeTask(taskId);
