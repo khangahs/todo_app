@@ -22,10 +22,10 @@ class _IncompletePageState extends State<IncompletePage> {
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             default:
               if (snapshot.data == null) {
-                return CircularProgressIndicator();
+                return Center(child: CircularProgressIndicator());
               } else {
                 final dbRef = snapshot.data.documents;
                 return (taskList.length < 1)

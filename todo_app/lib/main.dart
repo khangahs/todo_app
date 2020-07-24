@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          home: MyHomePage(title: 'Flutter Demo Home Page'),
+          home: MyHomePage(),
         ));
   }
 }
@@ -58,11 +58,42 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("Todo App"),
-      ),
-      body: _tabLists.elementAt(_selectedIndex),
+      backgroundColor: Colors.blue,
+      body: Stack(children: [
+        Positioned(
+          width: 200,
+          height: 300,
+          top: 80,
+          child: Image.asset(
+            'assets/images/aqua.gif',
+            fit: BoxFit.contain,
+          ),
+        ),
+        Positioned(
+          child: Text(
+            "Todos",
+            style: TextStyle(
+                color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold),
+          ),
+          top: 40,
+          left: 20,
+        ),
+        DraggableScrollableSheet(
+            maxChildSize: 0.85,
+            minChildSize: 0.1,
+            builder: (BuildContext context, ScrollController scrollController) {
+              return Stack(overflow: Overflow.visible, children: [
+                Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(40),
+                          topLeft: Radius.circular(40)),
+                    ),
+                    child: _tabLists.elementAt(_selectedIndex))
+              ]);
+            }),
+      ]),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {

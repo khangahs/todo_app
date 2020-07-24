@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lite_rolling_switch/lite_rolling_switch.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/provider/provider.dart';
 import 'package:todoapp/modal/task.dart';
@@ -99,25 +99,27 @@ class _AddTaskState extends State<AddTask> {
                 ? Spacer()
                 : Container(
                     alignment: Alignment.bottomRight,
-                    child: LiteRollingSwitch(
+                    child: FlutterSwitch(
+                      activeText: "Complete!",
+                      inactiveText: "Incomplete",
+                      width: 200.0,
+                      height: 50.0,
+                      valueFontSize: 20.0,
+                      toggleSize: 45.0,
                       value: result,
-                      textOn: 'Complete',
-                      textOff: 'Incomplete',
-                      colorOn: Colors.greenAccent[700],
-                      colorOff: Colors.redAccent[700],
-                      iconOn: Icons.done,
-                      iconOff: Icons.remove_circle_outline,
-                      textSize: 16.0,
-                      onTap: () {
-                        Future.delayed(Duration(seconds: 2), () {
+                      borderRadius: 30.0,
+                      padding: 8.0,
+                      showOnOff: true,
+                      onToggle: (bool newValue) async {
+                        setState(() {
+                          result = newValue;
+                          updateStatus(newValue);
+                        });
+                        Future.delayed(Duration(seconds: 1), () {
                           setState(() {
                             Navigator.of(context).pop();
                           });
                         });
-                      },
-                      onChanged: (bool newValue) async {
-                        result = newValue;
-                        updateStatus(newValue);
                       },
                     ),
                   ),
