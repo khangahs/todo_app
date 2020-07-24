@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/provider/provider.dart';
 import 'package:todoapp/modal/task.dart';
@@ -10,9 +12,9 @@ class AddTask extends StatefulWidget {
   final String taskId;
   final String description;
   final bool isEditMode;
-  final Task task;
+  final bool isDone;
 
-  AddTask({this.taskId, this.description, this.isEditMode, this.task});
+  AddTask({this.taskId, this.description, this.isDone, this.isEditMode});
 
   @override
   _AddTaskState createState() => _AddTaskState();
@@ -38,8 +40,9 @@ class _AddTaskState extends State<AddTask> {
       if (!widget.isEditMode) {
         createTask(Task());
       } else {
-        Provider.of<TaskProvider>(context, listen: false);
+        final task = Provider.of<TaskProvider>(context, listen: false);
         createTask(Task());
+        task.removeTask(widget.taskId);
       }
       Navigator.of(context).pop();
     }
@@ -48,19 +51,23 @@ class _AddTaskState extends State<AddTask> {
   @override
   void initState() {
     if (widget.isEditMode) {
-      final taskList = Provider.of<List<Task>>(context);
-      Task getById(String id) {
-        return taskList.firstWhere((task) => task.taskId == id);
-      }
-
-      getById(task.taskId);
-      _inputDescription = task.description;
+      task = Provider.of<TaskProvider>(context, listen: false)
+          .getById(widget.taskId);
+      _inputDescription = widget.description;
     }
     super.initState();
   }
 
+  void updateStatus(bool newValue) async {
+    await _db
+        .collection('tasks')
+        .document(widget.taskId)
+        .updateData({'isDone': newValue});
+  }
+
   @override
   Widget build(BuildContext context) {
+    bool result = widget.isDone;
     return Container(
       padding: EdgeInsets.all(20),
       child: Form(
@@ -86,18 +93,63 @@ class _AddTaskState extends State<AddTask> {
               },
             ),
             SizedBox(
-              height: 20,
+              height: 40,
             ),
+            (!widget.isEditMode)
+                ? Spacer()
+                : Container(
+                    alignment: Alignment.bottomRight,
+                    child: LiteRollingSwitch(
+                      value: result,
+                      textOn: 'Complete',
+                      textOff: 'Incomplete',
+                      colorOn: Colors.greenAccent[700],
+                      colorOff: Colors.redAccent[700],
+                      iconOn: Icons.done,
+                      iconOff: Icons.remove_circle_outline,
+                      textSize: 16.0,
+                      onTap: () {
+                        Future.delayed(Duration(seconds: 2), () {
+                          setState(() {
+                            Navigator.of(context).pop();
+                          });
+                        });
+                      },
+                      onChanged: (bool newValue) async {
+                        result = newValue;
+                        updateStatus(newValue);
+                      },
+                    ),
+                  ),
+            Spacer(),
             Container(
-              alignment: Alignment.bottomRight,
-              child: FlatButton(
-                child: Text(
-                  !widget.isEditMode ? 'ADD TASK' : 'EDIT TASK',
-                  style: TextStyle(
-                      color: Theme.of(context).accentColor,
-                      fontFamily: 'Lato',
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
+              alignment: Alignment.center,
+              child: RaisedButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(80.0),
+                ),
+                padding: EdgeInsets.all(0.0),
+                textColor: Colors.white,
+                child: Ink(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Color(0xff374ABE), Color(0xff64B6FF)],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                      borderRadius: BorderRadius.circular(30.0)),
+                  child: Container(
+                    constraints:
+                        BoxConstraints(maxWidth: 300.0, minHeight: 50.0),
+                    alignment: Alignment.center,
+                    child: Text(
+                      !widget.isEditMode ? 'ADD TASK' : 'EDIT TASK',
+                      style: TextStyle(
+                          fontFamily: 'Lato',
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
                 ),
                 onPressed: () {
                   _validateForm();

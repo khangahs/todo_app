@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:todoapp/widget/carditem.dart';
-import 'package:todoapp/provider/provider.dart';
-import 'package:provider/provider.dart';
 import 'package:todoapp/modal/task.dart';
 
 class TheCard extends StatefulWidget {
@@ -28,7 +26,6 @@ class _TheCardState extends State<TheCard> {
 //  }
 
   Widget build(BuildContext context) {
-    final changeStatus = Provider.of<TaskProvider>(context, listen: false);
     return GestureDetector(
         onTap: _checkItem,
         child: CheckboxListTile(
