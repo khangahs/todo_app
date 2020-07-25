@@ -4,7 +4,6 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/provider/provider.dart';
 import 'package:todoapp/modal/task.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 import '../modal/task.dart';
 
@@ -22,26 +21,18 @@ class AddTask extends StatefulWidget {
 
 class _AddTaskState extends State<AddTask> {
   var uuid = Uuid();
-  Firestore _db = Firestore.instance;
-  Task task;
   String _inputDescription;
+  bool _result;
   final _formKey = GlobalKey<FormState>();
 
-  Future<void> createTask(Task task) {
-    String documentId = uuid.v4();
-    Task task =
-        Task(taskId: documentId, description: _inputDescription, isDone: false);
-    return _db.collection('tasks').document(documentId).setData(task.toMap());
-  }
-
   void _validateForm() {
+    final task = Provider.of<TaskProvider>(context, listen: false);
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       if (!widget.isEditMode) {
-        createTask(Task());
+        task.createTask();
       } else {
-        final task = Provider.of<TaskProvider>(context, listen: false);
-        createTask(Task());
+        task.createTask();
         task.removeTask(widget.taskId);
       }
       Navigator.of(context).pop();
@@ -51,23 +42,18 @@ class _AddTaskState extends State<AddTask> {
   @override
   void initState() {
     if (widget.isEditMode) {
-      task = Provider.of<TaskProvider>(context, listen: false)
-          .getById(widget.taskId);
       _inputDescription = widget.description;
+      _result = widget.isDone;
+      final task = Provider.of<TaskProvider>(context, listen: false);
+      task.getById(widget.taskId);
+      task.loadValues(Task());
     }
     super.initState();
   }
 
-  void updateStatus(bool newValue) async {
-    await _db
-        .collection('tasks')
-        .document(widget.taskId)
-        .updateData({'isDone': newValue});
-  }
-
   @override
   Widget build(BuildContext context) {
-    bool result = widget.isDone;
+    final task = Provider.of<TaskProvider>(context, listen: false);
     return Container(
       padding: EdgeInsets.all(20),
       child: Form(
@@ -89,7 +75,7 @@ class _AddTaskState extends State<AddTask> {
                 return null;
               },
               onSaved: (value) {
-                _inputDescription = value;
+                task.changeText(value);
               },
             ),
             SizedBox(
@@ -106,19 +92,16 @@ class _AddTaskState extends State<AddTask> {
                       height: 50.0,
                       valueFontSize: 20.0,
                       toggleSize: 45.0,
-                      value: result,
+                      value: _result,
                       borderRadius: 30.0,
                       padding: 8.0,
                       showOnOff: true,
-                      onToggle: (bool newValue) async {
+                      onToggle: (isComplete) {
                         setState(() {
-                          result = newValue;
-                          updateStatus(newValue);
-                        });
-                        Future.delayed(Duration(seconds: 1), () {
-                          setState(() {
-                            Navigator.of(context).pop();
-                          });
+                          _result = isComplete;
+                          task.updateOption(
+                              id: widget.taskId, value: isComplete);
+                          Navigator.of(context).pop();
                         });
                       },
                     ),

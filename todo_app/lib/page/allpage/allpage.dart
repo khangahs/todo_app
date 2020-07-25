@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:todoapp/modal/task.dart';
 import 'package:todoapp/provider/provider.dart';
 import 'package:provider/provider.dart';
-import 'package:todoapp/widget/addtask.dart';
 import 'package:todoapp/widget/card.dart';
 
 class AllPage extends StatelessWidget {

@@ -6,8 +6,6 @@ class FirestoreService {
   Firestore _db = Firestore.instance;
   var uuid = Uuid();
 
-
-
   Stream<List<Task>> getTasks() {
     return _db.collection('tasks').snapshots().map((snapshot) => snapshot
         .documents
@@ -19,4 +17,14 @@ class FirestoreService {
     return _db.collection('tasks').document(taskId).delete();
   }
 
+  Future<void> updateOption({String taskId, bool newValue}) {
+    return _db
+        .collection('tasks')
+        .document(taskId)
+        .updateData({'isDone': newValue});
+  }
+
+  Future<void> createTask(Task task) {
+    return _db.collection('tasks').document(task.taskId).setData(task.toMap());
+  }
 }
