@@ -1,38 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:todoapp/widget/addtask.dart';
 import 'package:todoapp/widget/carditem.dart';
-import 'package:todoapp/modal/task.dart';
 
-class TheCard extends StatefulWidget {
-  final Task task;
+class TheCard extends StatelessWidget {
+  String taskId;
+  String description;
+  bool isDone;
 
-  TheCard(this.task);
+  TheCard(
+      {@required this.taskId,
+      @required this.description,
+      @required this.isDone});
 
   @override
-  _TheCardState createState() => _TheCardState();
-}
-
-class _TheCardState extends State<TheCard> {
-  void _checkItem() {
-    setState(() {
-//      Provider.of<TaskProvider>(context, listen: false)
-//          .changeStatus(false, Task(isDone: false));
-    });
-  }
-
-//  Future<dynamic> checkLEDStatus() async {
-//    DocumentSnapshot snapshot =
-//    await db.collection('LEDStatus').document('LEDStatus').get();
-//    return snapshot.data['LEDOn'];
-//  }
-
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: _checkItem,
-        child: CheckboxListTile(
-          title: CardItem(widget.task.isDone, widget.task.description),
-          value: widget.task.isDone,
-          onChanged: (_) => _checkItem(),
-          secondary: const Icon(Icons.hourglass_empty),
-        ));
+    return CheckboxListTile(
+      title: CardItem(isDone: isDone, description: description),
+      value: isDone,
+      onChanged: (_) {
+        showModalBottomSheet(
+            context: context,
+            builder: (_) => AddTask(
+                taskId: taskId,
+                description: description,
+                isDone: isDone,
+                isEditMode: true));
+      },
+    );
   }
 }

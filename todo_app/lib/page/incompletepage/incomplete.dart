@@ -4,13 +4,9 @@ import 'package:todoapp/modal/task.dart';
 import 'package:todoapp/provider/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/widget/addtask.dart';
+import 'package:todoapp/widget/card.dart';
 
-class IncompletePage extends StatefulWidget {
-  @override
-  _IncompletePageState createState() => _IncompletePageState();
-}
-
-class _IncompletePageState extends State<IncompletePage> {
+class IncompletePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final taskList = Provider.of<List<Task>>(context);
@@ -82,19 +78,10 @@ class _IncompletePageState extends State<IncompletePage> {
                               Provider.of<TaskProvider>(context, listen: false)
                                   .removeTask(dbRef[index]["taskId"]);
                             },
-                            child: CheckboxListTile(
-                              title: Text(dbRef[index]["description"]),
-                              value: dbRef[index]["isDone"],
-                              onChanged: (_) {
-                                showModalBottomSheet(
-                                    context: context,
-                                    builder: (_) => AddTask(
-                                        taskId: dbRef[index]["taskId"],
-                                        description: dbRef[index]
-                                            ["description"],
-                                        isDone: dbRef[index]["isDone"],
-                                        isEditMode: true));
-                              },
+                            child: TheCard(
+                              taskId: dbRef[index]["taskId"],
+                              description: dbRef[index]["description"],
+                              isDone: dbRef[index]["isDone"],
                             ),
                           );
                         },

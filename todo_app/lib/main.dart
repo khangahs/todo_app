@@ -7,8 +7,6 @@ import 'package:todoapp/provider/provider.dart';
 import 'package:todoapp/service/firebase.dart';
 import 'package:todoapp/widget/addtask.dart';
 
-import 'modal/task.dart';
-
 void main() {
   runApp(MyApp());
 }
@@ -23,7 +21,6 @@ class MyApp extends StatelessWidget {
           StreamProvider(create: (context) => firestoreService.getTasks())
         ],
         child: MaterialApp(
-          title: 'Flutter Demo',
           theme: ThemeData(
             primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -44,7 +41,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
-  Task task;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -64,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
           width: 200,
           height: 300,
           top: 80,
+          left: 30,
           child: Image.asset(
             'assets/images/aqua.gif',
             fit: BoxFit.contain,
@@ -79,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
           left: 20,
         ),
         DraggableScrollableSheet(
-            maxChildSize: 0.85,
+            maxChildSize: 1,
             minChildSize: 0.1,
             builder: (BuildContext context, ScrollController scrollController) {
               return Stack(overflow: Overflow.visible, children: [

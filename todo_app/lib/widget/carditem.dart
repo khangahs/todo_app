@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
 
 class CardItem extends StatelessWidget {
-  final bool check;
-  final String text;
+  final bool isDone;
+  final String description;
 
-  CardItem(
-    this.check,
-    this.text,
-  );
+  CardItem({this.isDone, this.description});
 
   Widget build(BuildContext context) {
-    if (check) {
+    if (isDone) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            text,
+            description,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-                fontSize: 22,
+                fontSize: 20,
                 color: Colors.grey,
                 decoration: TextDecoration.lineThrough),
           ),
@@ -31,10 +28,10 @@ class CardItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          text,
+          description,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
-            fontSize: 22,
+            fontSize: 20,
           ),
         ),
       ],
