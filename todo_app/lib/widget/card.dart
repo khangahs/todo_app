@@ -3,14 +3,11 @@ import 'package:todoapp/widget/addtask.dart';
 import 'package:todoapp/widget/carditem.dart';
 
 class TheCard extends StatelessWidget {
-  String taskId;
-  String description;
-  bool isDone;
+  final String taskId;
+  final String description;
+  final bool isDone;
 
-  TheCard(
-      {@required this.taskId,
-      @required this.description,
-      @required this.isDone});
+  TheCard({this.taskId, this.description, this.isDone});
 
   @override
   Widget build(BuildContext context) {

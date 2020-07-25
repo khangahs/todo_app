@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => TaskProvider()),
-          StreamProvider(create: (context) => firestoreService.getTasks())
+          StreamProvider(create: (context) => firestoreService.getTasks()),
         ],
         child: MaterialApp(
           theme: ThemeData(
@@ -59,10 +59,40 @@ class _MyHomePageState extends State<MyHomePage> {
         Positioned(
           width: 200,
           height: 300,
-          top: 80,
-          left: 30,
+          top: 90,
+          right: 200,
           child: Image.asset(
             'assets/images/aqua.gif',
+            fit: BoxFit.contain,
+          ),
+        ),
+        Positioned(
+          width: 200,
+          height: 300,
+          top: 90,
+          left: 30,
+          child: Image.asset(
+            'assets/images/kazuma.gif',
+            fit: BoxFit.contain,
+          ),
+        ),
+        Positioned(
+          width: 200,
+          height: 300,
+          top: 90,
+          left: 120,
+          child: Image.asset(
+            'assets/images/megumin.gif',
+            fit: BoxFit.contain,
+          ),
+        ),
+        Positioned(
+          width: 200,
+          height: 300,
+          top: 90,
+          left: 200,
+          child: Image.asset(
+            'assets/images/darkness.gif',
             fit: BoxFit.contain,
           ),
         ),
@@ -115,7 +145,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: Colors.amber[900],
         onTap: _onItemTapped,
       ),
     );

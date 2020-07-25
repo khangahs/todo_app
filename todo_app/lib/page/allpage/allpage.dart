@@ -9,7 +9,6 @@ class AllPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final taskList = Provider.of<List<Task>>(context);
-
     return StreamBuilder(
         stream: Firestore.instance.collection('tasks').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {

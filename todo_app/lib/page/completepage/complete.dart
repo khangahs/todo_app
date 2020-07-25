@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:todoapp/modal/task.dart';
 import 'package:todoapp/provider/provider.dart';
 import 'package:provider/provider.dart';
-import 'package:todoapp/widget/addtask.dart';
 import 'package:todoapp/widget/card.dart';
 
 class CompletePage extends StatelessWidget {
@@ -26,66 +25,66 @@ class CompletePage extends StatelessWidget {
                 final dbRef = snapshot.data.documents;
                 return (taskList.length < 1)
                     ? LayoutBuilder(
-                  builder: (context, constraints) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          SizedBox(
-                            height: 40,
-                          ),
-                          Text(
-                            'No tasks here...',
-                            style: Theme.of(context).textTheme.headline6,
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                )
+                        builder: (context, constraints) {
+                          return Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                SizedBox(
+                                  height: 40,
+                                ),
+                                Text(
+                                  'No tasks here...',
+                                  style: Theme.of(context).textTheme.headline6,
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      )
                     : ListView.builder(
-                  itemCount: dbRef.length,
-                  itemBuilder: (context, index) {
-                    return Dismissible(
-                      key: ValueKey(dbRef[index]["taskId"]),
-                      direction: DismissDirection.endToStart,
-                      background: Container(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 15),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              'DELETE',
-                              style: TextStyle(
-                                color: Theme.of(context).errorColor,
-                                fontFamily: 'Lato',
-                                fontSize: 16,
+                        itemCount: dbRef.length,
+                        itemBuilder: (context, index) {
+                          return Dismissible(
+                            key: ValueKey(dbRef[index]["taskId"]),
+                            direction: DismissDirection.endToStart,
+                            background: Container(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 15),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    'DELETE',
+                                    style: TextStyle(
+                                      color: Theme.of(context).errorColor,
+                                      fontFamily: 'Lato',
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  SizedBox(width: 5),
+                                  Icon(
+                                    Icons.delete,
+                                    color: Theme.of(context).errorColor,
+                                    size: 28,
+                                  ),
+                                ],
                               ),
                             ),
-                            SizedBox(width: 5),
-                            Icon(
-                              Icons.delete,
-                              color: Theme.of(context).errorColor,
-                              size: 28,
+                            onDismissed: (direction) {
+                              Provider.of<TaskProvider>(context, listen: false)
+                                  .removeTask(dbRef[index]["taskId"]);
+                            },
+                            child: TheCard(
+                              taskId: dbRef[index]["taskId"],
+                              description: dbRef[index]["description"],
+                              isDone: dbRef[index]["isDone"],
                             ),
-                          ],
-                        ),
-                      ),
-                      onDismissed: (direction) {
-                        Provider.of<TaskProvider>(context, listen: false)
-                            .removeTask(dbRef[index]["taskId"]);
-                      },
-                      child: TheCard(
-                        taskId: dbRef[index]["taskId"],
-                        description: dbRef[index]["description"],
-                        isDone: dbRef[index]["isDone"],
-                      ),
-                    );
-                  },
-                );
+                          );
+                        },
+                      );
               }
           }
         });
