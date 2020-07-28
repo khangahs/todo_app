@@ -1,6 +1,6 @@
 # TODO APP with CRUD Firebase
 
-Challenge App for Manabie Company.
+Challenge App for Recruiting IT Company.
 
 If questions occur, contact the developer via email.
 
